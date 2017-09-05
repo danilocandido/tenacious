@@ -3,9 +3,9 @@
 <div class='card'>
   <h4>Inventories</h4>
 
-  <% unless @inventories.empty? %>
+  <% unless @organization.owned_inventories.empty? %>
     <ul>
-      <% @inventories.each do |inventory| %>
+      <% @organization.owned_inventories.each do |inventory| %>
         <li>
           <%= link_to inventory.name, organization_inventory_path(inventory.owner, inventory) %>
         </li>

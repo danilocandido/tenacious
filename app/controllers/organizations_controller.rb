@@ -19,7 +19,6 @@ class OrganizationsController < ApplicationController
 
   def show
     @organization = Organization.find(params[:id])
-    @inventories = @organization.owned_inventories
     return if @organization.users.include? current_user
     flash[:alert] = 'You need to be part of this organization to view it'
     redirect_to root_path
