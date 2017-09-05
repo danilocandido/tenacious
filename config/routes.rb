@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   get '/dashboard', to: 'pages#dashboard'
   devise_for :users
   resources :users, only: [] do
-    resources :inventories, only: [:new, :create, :show]
+    resources :inventories, only: [:new, :create, :show, :edit, :update]
   end
   resources :organizations, only: [:new, :create, :show] do
-    resources :inventories, only: [:new, :create, :show]
+    resources :inventories, only: [:new, :create, :show, :edit, :update]
   end
 end

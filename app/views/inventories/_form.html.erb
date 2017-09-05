@@ -1,0 +1,21 @@
+<% if @owner.class == Organization %>
+<h2>Create an Inventory for <%= link_to @owner.name, organization_path(@owner) %></h2>
+<% else %>
+<h2>Create an Inventory for yourself</h2>
+<% end %>
+
+<%= render_errors_for(@inventory) %>
+
+<%= form_for [@owner, @inventory] do |f| %>
+  <div class='field'>
+    <%= f.label :name %>
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+  <div class='field'>
+    <%= f.label :description %>
+    <%= f.text_area :description, rows: 4 %>
+  </div>
+
+  <%= f.submit action_text %>
+<% end %>
