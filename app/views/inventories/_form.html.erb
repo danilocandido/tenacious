@@ -1,7 +1,7 @@
 <% if @owner.class == Organization %>
-<h2>Create an Inventory for <%= link_to @owner.name, organization_path(@owner) %></h2>
+<h2><%= "#{action_text} an Inventory for" %> <%= link_to @owner.name, organization_path(@owner) %></h2>
 <% else %>
-<h2>Create an Inventory for yourself</h2>
+<h2><%= "#{action_text} an Inventory for yourself" %> </h2>
 <% end %>
 
 <%= render_errors_for(@inventory) %>
@@ -17,5 +17,5 @@
     <%= f.text_area :description, rows: 4 %>
   </div>
 
-  <%= f.submit action_text %>
+  <%= f.submit "#{action_text} Inventory" %>
 <% end %>

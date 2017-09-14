@@ -24,9 +24,9 @@
             <% else %>
               <%= link_to inventory.name, user_inventory_path(current_user, inventory) %>
             <% end %>
+            <%= link_to 'Edit an Inventory', edit_user_inventory_path(current_user, inventory) %>
           </li>
         </ul>
-        <%= link_to 'Edit an Inventory', edit_user_inventory_path(current_user, inventory) %>
       <% end %>
       
   <% end %>
