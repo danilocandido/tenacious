@@ -35,7 +35,6 @@ class InventoriesController < ApplicationController
 
   def show
     unless @inventory.users.include? current_user
-      puts 'teste'
       flash[:alert] = 'You need to be part of this inventory to view it'
       redirect_to root_path and return
     end
