@@ -18,10 +18,56 @@ RSpec.feature 'Editing an inventory' do
       end
 
       feature 'fails' do
-        scenario "and doesn't save the inventory to the database" do
-          #puts Inventory.count #test -> returned value 1
-          #puts original_inventory_count #test -> returned value 0
-          expect(Inventory.count).to eq(original_inventory_count)
+        scenario "and doesn't save the inventory" do
+          expect(page).to have_content("Name can't be blank")
+        end
+      end
+    end
+  end
+
+  shared_examples 'a successful inventory edition' do |owner_string|
+    feature 'with valid inputs' do
+      if owner_string == 'organization'
+        let(:owner) { organization }
+      elsif owner_string == 'org_owner'
+        let(:owner) { org_owner }
+      end
+
+      let(:new_name) { 'new name' }
+      let(:new_description) { 'new description' }
+
+      before do
+        fill_in 'inventory_name', with: new_name
+        fill_in 'inventory_description', with: new_description
+        click_button 'Edit Inventory'
+      end
+
+      feature 'success' do
+        let(:edited_inventory) { Inventory.last }
+
+        scenario 'and edit the inventory to the database' do
+          expect(Inventory.count).to eq(1)
+        end
+
+        scenario 'and has the same attributes as input edited into the form' do
+          expect(edited_inventory.reload.name).to eq(new_name)
+          expect(edited_inventory.reload.description).to eq(new_description)
+        end
+
+        scenario 'and sets the owner as the owner of the inventory' do
+          expect(edited_inventory.owner).to eq(owner)
+        end
+
+        scenario 'and redirects to the inventory path' do
+          if owner_string == 'organization'
+            expect(current_path).to eq(organization_inventory_path(owner, edited_inventory))
+          elsif owner_string == 'org_owner'
+            expect(current_path).to eq(user_inventory_path(owner, edited_inventory))
+          end
+        end
+
+        scenario 'and shows a message saying the inventory was edited' do
+          expect(page).to have_content('Your inventory has been successfully edited')
         end
       end
     end
@@ -40,6 +86,8 @@ RSpec.feature 'Editing an inventory' do
     end
 
     include_examples 'a failed inventory edition'
+
+    include_examples 'a successful inventory edition', 'org_owner'
   end
 
 end

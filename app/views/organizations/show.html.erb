@@ -8,6 +8,7 @@
       <% @organization.owned_inventories.each do |inventory| %>
         <li>
           <%= link_to inventory.name, organization_inventory_path(inventory.owner, inventory) %>
+          <%= link_to 'Edit an Inventory', edit_organization_inventory_path(@organization, inventory) %>
         </li>
       <% end %>
     </ul>
