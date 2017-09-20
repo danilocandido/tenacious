@@ -8,8 +8,7 @@ class InventoriesController < ApplicationController
     @inventory = Inventory.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @inventory = Inventory.new(inventory_params)
@@ -34,10 +33,9 @@ class InventoriesController < ApplicationController
   end
 
   def show
-    unless @inventory.users.include? current_user
-      flash[:alert] = 'You need to be part of this inventory to view it'
-      redirect_to root_path and return
-    end
+    return if @inventory.users.include? current_user
+    flash[:alert] = 'You need to be part of this inventory to view it'
+    redirect_to root_path
   end
 
   private

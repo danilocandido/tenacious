@@ -93,5 +93,4 @@ RSpec.feature 'Editing an inventory' do
 
     include_examples 'a successful inventory edition', 'org_owner'
   end
-
 end
