@@ -58,7 +58,7 @@ RSpec.feature 'Editing an inventory' do
           expect(edited_inventory.owner).to eq(owner)
         end
 
-        scenario 'and includes the user as part of he inventory' do
+        scenario 'and includes the user as part of the inventory' do
           expect(edited_inventory.users).to include(org_owner)
         end
 
