@@ -5,7 +5,7 @@ include FeatureHelpers
 RSpec.feature 'Editing an inventory' do
   let(:org_owner) { FactoryGirl.create(:user, :confirmed) }
   let(:member) { FactoryGirl.create(:user, :confirmed) }
-  let(:inventory) { FactoryGirl.create(:inventory, owner: org_owner) }
+  let(:inventory) { FactoryGirl.create(:inventory, owner: org_owner, users: [org_owner]) }
   let!(:organization) { FactoryGirl.create(:organization, owner: org_owner, users: [org_owner, member]) }
   let!(:original_inventory_count) { Inventory.count }
 
@@ -50,12 +50,16 @@ RSpec.feature 'Editing an inventory' do
         end
 
         scenario 'and has the same attributes as input edited into the form' do
-          expect(edited_inventory.reload.name).to eq(new_name)
-          expect(edited_inventory.reload.description).to eq(new_description)
+          expect(edited_inventory.name).to eq(new_name)
+          expect(edited_inventory.description).to eq(new_description)
         end
 
         scenario 'and sets the owner as the owner of the inventory' do
           expect(edited_inventory.owner).to eq(owner)
+        end
+
+        scenario 'and includes the user as part of he inventory' do
+          expect(edited_inventory.users).to include(org_owner)
         end
 
         scenario 'and redirects to the inventory path' do
