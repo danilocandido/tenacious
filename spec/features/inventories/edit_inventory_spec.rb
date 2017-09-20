@@ -27,11 +27,7 @@ RSpec.feature 'Editing an inventory' do
 
   shared_examples 'a successful inventory edition' do |owner_string|
     feature 'with valid inputs' do
-      if owner_string == 'organization'
-        let(:owner) { organization }
-      elsif owner_string == 'org_owner'
-        let(:owner) { org_owner }
-      end
+      let(:owner) { org_owner }
 
       let(:new_name) { 'new name' }
       let(:new_description) { 'new description' }
