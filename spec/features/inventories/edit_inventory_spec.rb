@@ -25,7 +25,7 @@ RSpec.feature 'Editing an inventory' do
     end
   end
 
-  shared_examples 'a successful inventory edition' do |owner_string|
+  shared_examples 'a successful inventory edition' do
     feature 'with valid inputs' do
       let(:owner) { org_owner }
 
@@ -83,6 +83,6 @@ RSpec.feature 'Editing an inventory' do
 
     include_examples 'a failed inventory edition'
 
-    include_examples 'a successful inventory edition', 'org_owner'
+    include_examples 'a successful inventory edition'
   end
 end
