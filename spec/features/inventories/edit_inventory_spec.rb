@@ -59,11 +59,7 @@ RSpec.feature 'Editing an inventory' do
         end
 
         scenario 'and redirects to the inventory path' do
-          if owner_string == 'organization'
-            expect(current_path).to eq(organization_inventory_path(owner, edited_inventory))
-          elsif owner_string == 'org_owner'
-            expect(current_path).to eq(user_inventory_path(owner, edited_inventory))
-          end
+          expect(current_path).to eq(user_inventory_path(owner, edited_inventory))
         end
 
         scenario 'and shows a message saying the inventory was edited' do
