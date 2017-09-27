@@ -9,7 +9,7 @@ RSpec.feature 'Editing an inventory' do
   let!(:organization) { FactoryGirl.create(:organization, owner: org_owner, users: [org_owner, member]) }
   let!(:original_inventory_count) { Inventory.count }
 
-  shared_examples 'a failed inventory edition' do
+  shared_examples 'a failed inventory edit' do
     feature 'with no inputs' do
       before do
         fill_in 'inventory_name', with: ''
@@ -40,10 +40,6 @@ RSpec.feature 'Editing an inventory' do
 
       feature 'success' do
         let(:edited_inventory) { Inventory.last }
-
-        scenario 'and edit the inventory to the database' do
-          expect(Inventory.count).to eq(1)
-        end
 
         scenario 'and has the same attributes as input edited into the form' do
           expect(edited_inventory.name).to eq(new_name)
@@ -81,7 +77,7 @@ RSpec.feature 'Editing an inventory' do
       expect(page).to have_content('Edit an Inventory for yourself')
     end
 
-    include_examples 'a failed inventory edition'
+    include_examples 'a failed inventory edit'
 
     include_examples 'a successful inventory edition'
   end
