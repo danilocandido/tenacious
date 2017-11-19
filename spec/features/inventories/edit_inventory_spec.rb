@@ -6,6 +6,7 @@ RSpec.feature 'Editing an inventory' do
   let(:org_owner) { FactoryGirl.create(:user, :confirmed) }
   let(:member) { FactoryGirl.create(:user, :confirmed) }
   let(:inventory) { FactoryGirl.create(:inventory, owner: org_owner, users: [org_owner]) }
+  let(:inventory_user) { FactoryGirl.build(:inventory_user, user: org_owner, inventory: inventory) }
   let!(:organization) { FactoryGirl.create(:organization, owner: org_owner, users: [org_owner, member]) }
   let!(:original_inventory_count) { Inventory.count }
 
@@ -28,7 +29,6 @@ RSpec.feature 'Editing an inventory' do
   shared_examples 'a successful inventory edition' do
     feature 'with valid inputs' do
       let(:owner) { org_owner }
-
       let(:new_name) { 'new name' }
       let(:new_description) { 'new description' }
 
@@ -39,7 +39,7 @@ RSpec.feature 'Editing an inventory' do
       end
 
       feature 'success' do
-        let(:edited_inventory) { Inventory.last }
+        let(:edited_inventory) { InventoryUser.inventory.last }
 
         scenario 'and has the same attributes as input edited into the form' do
           expect(edited_inventory.name).to eq(new_name)
