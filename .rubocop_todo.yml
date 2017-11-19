@@ -62,14 +62,6 @@ Style/BlockComments:
   Exclude:
     - 'spec/spec_helper.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-# SupportedStyles: compact, expanded
-Style/EmptyMethod:
-  Exclude:
-    - 'app/controllers/pages_controller.rb'
-
 # Offense count: 55
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.

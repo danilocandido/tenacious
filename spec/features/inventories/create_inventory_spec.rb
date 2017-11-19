@@ -62,7 +62,7 @@ RSpec.feature 'Creating an inventory' do
         end
 
         scenario 'and sets the user_role on the inventory as admin' do
-          expect(InventoryUser.where(user_id: org_owner, inventory_id: created_inventory)[0].user_role).to eq('admin')
+          expect(InventoryUser.where(user_id: org_owner, inventory_id: created_inventory).first.user_role).to eq('admin')
         end
 
         scenario 'and redirects to the inventory path' do

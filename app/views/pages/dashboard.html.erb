@@ -1,9 +1,9 @@
 <div class='card'>
   <h4>Organizations</h4>
 
-  <% unless @organizations.empty? %>  
+  <% unless current_user.organizations.empty? %>  
     <ul>
-      <% @organizations.each do |organization| %>
+      <% current_user.organizations.each do |organization| %>
         <li><%= link_to organization.name, organization_path(organization) %></li>
       <% end %>
     </ul>
@@ -15,20 +15,35 @@
 <div class='card'>
   <h4>Inventories</h4>
 
-  <% unless @inventories.empty? %>
-      <% @inventories.each do |inventory| %>
-        <ul>
-          <li>
-            <% if inventory.owner_type == 'Organization' %>
-              <%= link_to "#{inventory.owner.name} / #{inventory.name}", organization_inventory_path(inventory.owner, inventory) %>
-            <% else %>
-              <%= link_to inventory.name, user_inventory_path(current_user, inventory) %>
-            <% end %>
-            <%= link_to 'Edit an Inventory', edit_user_inventory_path(current_user, inventory) %>
-          </li>
-        </ul>
+  <% unless current_user.inventories.empty? %>
+    <% current_user.inventories.each do |inventory| %>
+      <ul>
+        <li>
+          <% if inventory.owner_type == 'Organization' %>
+            <%= link_to "#{inventory.owner.name} / #{inventory.name}", organization_inventory_path(inventory.owner, inventory) %>
+          <% else %>
+            <%= link_to inventory.name, user_inventory_path(inventory.owner, inventory) %>
+          <% end %>
+          <%= link_to 'Edit an Inventory', edit_user_inventory_path(current_user, inventory) %>
+        </li>
+      </ul>
+    <% end %>
+  <% end %>
+
+  <% unless current_user.pending_inventories.empty? %>
+    <h4>Pending Invitations</h4>
+    <ul>
+      <% current_user.pending_inventories.each do |inventory| %>
+        <li>
+          <% if inventory.owner_type == 'Organization' %>
+            <%= link_to "#{inventory.owner.name} / #{inventory.name}", organization_inventory_path(inventory.owner, inventory) %>
+            <%= button_to 'accept invitation', confirm_invitation_path(user_id: current_user, inventory_id: inventory), method: :patch %>
+          <% else %>
+            <%= link_to inventory.name, user_inventory_path(inventory.owner, inventory) %>
+            <%= button_to 'accept invitation', confirm_invitation_path(user_id: current_user, inventory_id: inventory), method: :patch %>
+          <% end %>
+        </li>
       <% end %>
-      
   <% end %>
   <%= link_to 'Create an Inventory', new_user_inventory_path(current_user) %>
 </div>

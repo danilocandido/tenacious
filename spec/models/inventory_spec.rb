@@ -51,7 +51,7 @@ RSpec.describe Inventory, type: :model do
     it 'returns users belonging to the inventory' do
       inventory = FactoryGirl.create(:inventory)
       users = FactoryGirl.create_list(:user, 2, inventories: [inventory])
-      expect(inventory.users).to eq users
+      expect(inventory.users).to match_array(users)
     end
   end
 
@@ -70,6 +70,44 @@ RSpec.describe Inventory, type: :model do
       organization = FactoryGirl.create(:organization)
       inventory = FactoryGirl.create(:inventory, owner: organization)
       expect(inventory.owner_type).to eq('Organization')
+    end
+  end
+
+  describe 'user queries' do
+    before(:all) do
+      @inventory = FactoryGirl.create(:inventory)
+      @admin = FactoryGirl.create(:user)
+      @writer = FactoryGirl.create(:user)
+      @reader = FactoryGirl.create(:user)
+      @unconfirmed_user = FactoryGirl.create(:user)
+      FactoryGirl.create(:inventory_user, :confirmed, user: @admin, inventory: @inventory, user_role: 'admin')
+      FactoryGirl.create(:inventory_user, :confirmed, user: @writer, inventory: @inventory, user_role: 'write')
+      FactoryGirl.create(:inventory_user, :confirmed, user: @reader, inventory: @inventory, user_role: 'read')
+      FactoryGirl.create(:inventory_user, user: @unconfirmed_user, inventory: @inventory)
+    end
+
+    describe '#admins' do
+      it 'returns confirmed users with with a user_role of admin' do
+        expect(@inventory.admins).to eq([@admin])
+      end
+    end
+
+    describe '#writers' do
+      it 'returns confirmed users with a user_role of write' do
+        expect(@inventory.writers).to eq([@writer])
+      end
+    end
+
+    describe '#readers' do
+      it 'returns confirmed users with a user_role of read' do
+        expect(@inventory.readers).to eq([@reader])
+      end
+    end
+
+    describe '#invited_users' do
+      it 'returns unconfirmed users invited to the inventory' do
+        expect(@inventory.invited_users).to eq([@unconfirmed_user])
+      end
     end
   end
 end

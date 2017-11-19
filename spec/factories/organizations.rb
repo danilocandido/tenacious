@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :organization do
-    name { Faker::Name.unique.first_name }
+    sequence(:name) { |n| "#{Faker::Name.first_name}#{n}" }
     association :owner, factory: :user
   end
 end

@@ -1,0 +1,13 @@
+<h2>Invite a user to <%= @inventory.name %></h2>
+
+<% @users.each do |user| %>
+  <% unless @inventory.users.include? user %>
+    <div class='card'>
+      <h4><%= user.username %></h4>
+      <%= form_for @inventory_user, url: inventory_users_path(user_id: user, inventory_id: @inventory) do |f| %>
+        <%= f.select(:user_role, [['read'], ['write'], ['admin']]) %>
+        <%= f.submit 'Invite User' %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

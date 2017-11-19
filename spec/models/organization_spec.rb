@@ -48,14 +48,14 @@ RSpec.describe Organization, type: :model do
   describe '#users' do
     it 'returns users belonging to the organization' do
       users = FactoryGirl.create_list(:user, 2, organizations: [organization])
-      expect(organization.users).to eq(users)
+      expect(organization.users).to match_array(users)
     end
   end
 
   describe '#owned_inventories' do
     it 'returns inventories it owns' do
       inventories = FactoryGirl.create_list(:inventory, 2, owner: organization)
-      expect(organization.owned_inventories.sort).to eq(inventories.sort)
+      expect(organization.owned_inventories).to match_array(inventories)
     end
   end
 end

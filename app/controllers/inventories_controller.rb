@@ -1,7 +1,8 @@
 class InventoriesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_owner
+  before_action :set_owner, only: [:new, :create, :show, :edit, :update]
   before_action :validate_organization_owner, only: [:new, :create, :edit, :update]
+  before_action :load_inventory, only: [:show]
 
   def new
     @inventory = Inventory.new
@@ -15,13 +16,13 @@ class InventoriesController < ApplicationController
     @inventory = Inventory.new(inventory_params)
     @inventory.owner = @owner
     if @inventory.save
-      inventory_user = InventoryUser.new(user: current_user, inventory: @inventory, user_role: 'admin')
+      inventory_user = InventoryUser.new(user: current_user, inventory: @inventory, user_role: 'admin', confirmed_at: Time.now)
       inventory_user.save
       flash[:success] = 'Your inventory has been successfully created'
       redirect_to [@owner, @inventory]
-      return
+    else
+      render 'new'
     end
-    render 'new'
   end
 
   def update
@@ -29,19 +30,23 @@ class InventoriesController < ApplicationController
     if @inventory.update(inventory_params)
       flash[:success] = 'Your inventory has been successfully edited'
       redirect_to [@owner, @inventory]
-      return
+    else
+      render 'edit'
     end
-    render 'new'
   end
 
   def show
-    @inventory = Inventory.find(params[:id])
-    return if @inventory.users.include? current_user
-    flash[:alert] = 'You need to be part of this inventory to view it'
-    redirect_to root_path
+    unless @inventory.users.include? current_user
+      flash[:alert] = 'You need to be part of this inventory to view it'
+      redirect_to root_path
+    end
   end
 
   private
+
+  def load_inventory
+    @inventory = current_user.inventories.find(params[:id])
+  end
 
   def inventory_params
     params.require(:inventory).permit(:name, :description)

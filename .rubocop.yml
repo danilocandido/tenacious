@@ -4,14 +4,20 @@ AllCops:
   Exclude:
     - db/schema.rb
     - db/migrate/**
-    - vendor/bundle/**/*
+    - vendor/**/*
     - node_modules/**/*
+  DisplayCopNames: true
+
+Documentation:
+  Enabled: false
 
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - Guardfile
-    - config/environments/production.rb
+    - config/environments/**/*
+    - db/seeds.rb
+    - config/routes.rb
 
 Style/Documentation:
   Exclude:
@@ -20,3 +26,11 @@ Style/Documentation:
     - 'app/models/*'
     - 'app/mailers/*'
     - 'config/application.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - db/migrate/*
+
+Metrics/AbcSize:
+  Exclude:
+    - db/migrate/*

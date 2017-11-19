@@ -14,6 +14,7 @@ RSpec.feature 'Users signing up' do
       fill_in 'Email', with: user.email
       fill_in 'Password', with: user.password
       fill_in 'user_password_confirmation', with: user.password
+      fill_in 'Username', with: user.username
       click_button 'Sign up'
     end
 
@@ -60,6 +61,7 @@ RSpec.feature 'Users signing up' do
     scenario 'shows messages saying why the user was not created' do
       expect(page).to have_content("Email can't be blank")
       expect(page).to have_content("Password can't be blank")
+      expect(page).to have_content("Username can't be blank")
     end
   end
 end

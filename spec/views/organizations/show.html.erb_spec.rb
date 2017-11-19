@@ -8,11 +8,14 @@ RSpec.describe 'organizations/show', type: :view do
 
   before do
     assign(:organization, organization)
-    allow(view).to receive(:current_user).and_return(member)
-    render
   end
 
   context 'when user is at minimum a member of the org' do
+    before do
+      allow(view).to receive(:current_user).and_return(member)
+      render
+    end
+
     it "displays the organization's name" do
       expect(rendered).to include organization.name
     end
@@ -28,10 +31,14 @@ RSpec.describe 'organizations/show', type: :view do
     end
   end
 
-  it 'displays a Create an Inventory link to owners' do
-    allow(view).to receive(:current_user).and_return(owner)
-    # double rendered to use the new mock
-    render
-    expect(rendered).to have_link('Create an Inventory')
+  context 'when user is an owner of the org' do
+    before do
+      allow(view).to receive(:current_user).and_return(owner)
+      render
+    end
+
+    it 'displays a Create an Inventory link to owners' do
+      expect(rendered).to have_link('Create an Inventory')
+    end
   end
 end
